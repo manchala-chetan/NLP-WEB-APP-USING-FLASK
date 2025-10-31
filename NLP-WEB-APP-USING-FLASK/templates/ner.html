@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NLP App | Named Entity Recognition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>Named Entity Recognition</h1>
+
+    <form action="/perform_ner" method="post">
+        <label for="ner_text">Type your text here</label>
+        <textarea id="ner_text" name="ner_text" placeholder="Enter text for entity recognition" title="Enter text to analyze"></textarea>
+        <input type="submit" value="Perform NER">
+    </form>
+
+    {% if response %}
+    <div class="result-container">
+        {% if response.get('error') %}
+            <h3>Error:</h3>
+            <p>{{ response.get('error') }}</p>
+        {% elif response.get('entities') %}
+            <h3>Entities Found:</h3>
+            {% for i in response['entities'] %}
+                <p><strong>{{ i['name'] }}</strong> - {{ i['category'] }}</p>
+            {% endfor %}
+
+            {% if response.get('usage') == 'mock' %}
+                <p><small><em>Note: Using mock API for demonstration purposes</em></small></p>
+            {% endif %}
+        {% else %}
+            <h3>Response:</h3>
+            <pre>{{ response }}</pre>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <p><a href="/profile">Back to Profile</a></p>
+</body>
+</html>

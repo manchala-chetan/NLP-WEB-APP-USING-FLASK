@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NLP App | Abuse Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>Abuse Detection</h1>
+
+    <form action="/perform_abuse_detection" method="post">
+        <label for="abuse_text">Type your text here</label>
+        <textarea id="abuse_text" name="abuse_text" placeholder="Enter text for abuse detection" title="Enter text to analyze"></textarea>
+        <input type="submit" value="Detect Abuse">
+    </form>
+
+    {% if response %}
+    <div class="result-container">
+        {% if response.get('error') %}
+            <h3>Error:</h3>
+            <p>{{ response.get('error') }}</p>
+        {% else %}
+            <h3>Abuse Detection Results:</h3>
+            <p>Abusive: {{ "%.2f"|format(response.get('abusive', 0) * 100) }}%</p>
+            <p>Non-Abusive: {{ "%.2f"|format(response.get('non_abusive', 0) * 100) }}%</p>
+
+            {% if response.get('usage') == 'mock' %}
+                <p><small><em>Note: Using mock API for demonstration purposes</em></small></p>
+            {% endif %}
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <p><a href="/profile">Back to Profile</a></p>
+</body>
+</html>
